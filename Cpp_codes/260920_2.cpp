@@ -14,16 +14,22 @@ class Date {
             day_ = date;
         }
         void AddDay(int inc) {
-            if (inc + day_ > month_days[month_ - 1]) {
-                int past_day = day_;
-                day_ = (inc + day_) % month_days[month_ - 1];
-                month_ += (inc + past_day) / month_days[month_ - 1];
+            day_ += inc;
+            while (day_ > month_days[month_ -1]) {
+                day_ -= month_days[month_ - 1];
+                month_ += 1;
+                if (month_ == 13) {
+                    month_ = 1;
+                    year_ += 1;
+                }
             }
         }
         void AddMonth(int inc) {
-            if (inc + month_ > 12) {
-                year_ += (inc + month_) / 12;
-                month_ = (inc + month_) % 12;
+            year_ += (inc + month_) / 12;
+            month_ = (inc + month_) % 12;
+            if (month_ == 0) {
+                year_ -= 1;
+                month_ = 12;
             }
         }
         void AddYear(int inc) {
