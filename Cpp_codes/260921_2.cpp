@@ -21,10 +21,19 @@ class Geometry {
 
     public:
         Geometry(Point **point_list) {
-            *point_array = *point_list;
-            size = sizeof(*point_list);
+            size = sizeof(point_list);
+            if (size <= sizeof(point_array)) {
+                for (int i = 0; i < size; i++) {
+                    point_array[i] = point_list[i];
+                }
+            }
         }
-        Geometry() = default;
+        Geometry() {
+            size = 0;
+            for (int i = 0; i < 100; i++) {
+                point_array[i] = nullptr;
+            }
+        }
 
         void AddPoint(const Point &point);
         void PrintDistance();
@@ -32,9 +41,8 @@ class Geometry {
 };
 
 void Geometry::AddPoint(const Point &point) {
-    if (size != 100) {
-        *point_array[size] = point;
-        size++;
+    if (size < 100) {
+        //point_array[size++] = point;
     }
 }
 
