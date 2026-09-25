@@ -16,37 +16,62 @@ class Point {
 
 class Geometry {
     Point* point_array[100];
-    int size = 0;
+    int size;
 
     public:
         Geometry(Point **point_list);
         Geometry();
+        ~Geometry();
 
         void AddPoint(const Point &point);
         void PrintDistance();
-        void PrintNumMEets();
+        void PrintNumMeets();
 };
 
-Geometry::Geometry() {
-    
+Geometry::Geometry(Point **point_list) {
+    int count = 0;
+
+    while (count < 100 && point_list[count] != nullptr) {
+        point_array[count] = new Point(point_list[count]->getX(), point_list[count]->getY());
+        count++;
+    }
+    size = count;
+    while (count < 100) {
+        point_array[count] = nullptr;
+        count++;
+    }
 }
 
+Geometry::Geometry() {
+    for (int i = 0; i < 100; i++){
+        point_array[i] = nullptr;
+    }
+    size = 0;
+}
+
+Geometry::~Geometry() {
+    for (int i = 0; i < size; i++) {
+        delete point_array[i];
+    }
+}
 
 void Geometry::AddPoint(const Point &point){
     // 여기서 const Point&로 받았다는 건
     // point 안의 값이 절대로 수정되면 안된다는겁니다
     // 그럼 point 안의 method중에서 "값을 변경할 가능성이 있는 method"는 애당초 실행할 수가 없으니까
-    // 무조건 const method만 실행이 간
-    point_array[size] = new Point(point.getX(), point.getY());
-    size++;
+    // 무조건 const method만 실행이 가능
+    if (size < 100){
+        point_array[size] = new Point(point.getX(), point.getY());
+        size++;
+    }
 }
 
 void Geometry::PrintDistance(){
-    if (size < 1) {
+    if (size < 2) {
         std::cout << "최소 2개의 점 필요." << std::endl;
         return;
     }
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size - 1; i++) {
         for (int j = i + 1; j < size; j++) {
             double dx = point_array[i]->getX() - point_array[j]->getX();
             double dy = point_array[i]->getY() - point_array[j]->getY();
@@ -60,7 +85,7 @@ void Geometry::PrintDistance(){
     }
 }
 
-void Geometry::PrintNumMEets(){
+void Geometry::PrintNumMeets(){
 
 }
 
